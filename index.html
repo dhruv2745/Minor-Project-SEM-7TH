@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CloudAgri Studio | Autonomous Precision Agriculture Platform</title>
+    <link rel="stylesheet" href="styles.css">
+    <meta name="description" content="CloudAgri Studio - Enterprise Precision Agriculture & Farm Twin Simulator. Features multi-zone IoT telemetry, AI computer vision disease diagnosis, FPV drone cockpit, autonomous robotics fleet, and AgriCopilot AI advisor.">
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <header>
+        <div class="logo-container" onclick="app.switchView('farm')">
+            <div class="logo-badge">🌱</div>
+            <div class="logo-text">
+                <h1>CloudAgri Studio</h1>
+                <span>Autonomous Precision Agriculture & Farm Twin</span>
+            </div>
+        </div>
+
+        <nav>
+            <button class="nav-btn active" id="navFarm" onclick="app.switchView('farm')">
+                <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path></svg>
+                Digital Twin
+            </button>
+            <button class="nav-btn" id="navDisease" onclick="app.switchView('disease')">
+                <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
+                Disease Vision Lab
+            </button>
+            <button class="nav-btn" id="navFpv" onclick="app.switchView('fpv')">
+                <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                FPV Drone Cockpit
+            </button>
+            <button class="nav-btn" id="navFleet" onclick="app.switchView('fleet')">
+                <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                Autonomous Fleet
+            </button>
+            <button class="nav-btn" id="navCopilot" onclick="app.switchView('copilot')">
+                <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path></svg>
+                AgriCopilot AI
+            </button>
+            <button class="nav-btn" id="navIrrigation" onclick="app.switchView('irrigation')">
+                <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
+                Smart Irrigation
+            </button>
+            <button class="nav-btn" id="navYield" onclick="app.switchView('yield')">
+                <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
+                Yield & Carbon
+            </button>
+            <button class="nav-btn" id="navWeather" onclick="app.switchView('weather')">
+                <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 00-9.78 2.096A4.001 4.001 0 003 15z"></path></svg>
+                Radar
+            </button>
+        </nav>
+
+        <!-- Simulation Controls & Audio Toggle -->
+        <div class="sim-controls">
+            <button id="audioToggleBtn" class="map-tool-btn" style="padding: 0.25rem 0.6rem; color: #cbd5e1;" onclick="app.toggleSoundscape()">
+                🔇 Audio Off
+            </button>
+            <span id="simClockDisplay" style="font-family: monospace; font-size: 0.8rem; color: var(--emerald-primary); font-weight: 700;">Day 48 | 14:30</span>
+            <button id="simPlayBtn" class="map-tool-btn active" style="padding: 0.2rem 0.5rem;" onclick="app.togglePlayPause()">⏸ Pause</button>
+            <div style="display: flex; gap: 0.2rem;">
+                <button class="map-tool-btn" id="speed1x" onclick="app.setSpeed(1)">1x</button>
+                <button class="map-tool-btn active" id="speed5x" onclick="app.setSpeed(5)">5x</button>
+                <button class="map-tool-btn" id="speed24x" onclick="app.setSpeed(24)">24x</button>
+            </div>
+            <select id="weatherEventSelect" onchange="app.triggerWeatherEvent(this.value)" style="background: rgba(13,23,30,0.9); border: 1px solid var(--border); color: #fff; font-size: 0.72rem; padding: 0.2rem 0.4rem; border-radius: 4px; outline: none;">
+                <option value="sunny">☀️ Optimal Sun</option>
+                <option value="rain">🌧️ Heavy Rain Storm</option>
+                <option value="heatwave">🔥 Heatwave Advisory</option>
+                <option value="frost">❄️ Frost Risk</option>
+            </select>
+        </div>
+    </header>
+
+    <main>
+
+        <!-- VIEW 1: FARM DIGITAL TWIN MAP & SOIL STRATIGRAPHY -->
+        <section id="viewFarm" class="view-section active">
+            <!-- Telemetry Overview Bar -->
+            <div class="telemetry-row">
+                <div class="metric-card">
+                    <div class="metric-title">
+                        <span>Total Monitored Area</span>
+                        <span>🌾</span>
+                    </div>
+                    <div class="metric-value">430 <span style="font-size: 1rem; color: var(--text-secondary); font-weight: 500;">Acres</span></div>
+                    <div class="metric-sub">5 Dedicated Precision Parcels</div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-title">
+                        <span>Average Soil Moisture</span>
+                        <span>💧</span>
+                    </div>
+                    <div id="statAvgMoisture" class="metric-value">34.6%</div>
+                    <div class="metric-sub">Capillary Field Capacity: Healthy</div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-title">
+                        <span>Canopy Health (NDVI)</span>
+                        <span>🛰️</span>
+                    </div>
+                    <div id="statAvgNdvi" class="metric-value">0.79</div>
+                    <div class="metric-sub" style="color: var(--accent-lime);">Vigorous Photosynthesis</div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-title">
+                        <span>Water Conserved (VRT)</span>
+                        <span>📈</span>
+                    </div>
+                    <div id="statWaterSaved" class="metric-value">142,400 <span style="font-size: 0.9rem; color: var(--text-secondary);">Gal</span></div>
+                    <div class="metric-sub">28.4% Below Regional Average</div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-title">
+                        <span>Ambient Microclimate</span>
+                        <span>🌡️</span>
+                    </div>
+                    <div id="statWeatherCondition" class="metric-value" style="font-size: 1.4rem; margin-top: 0.8rem;">27.5°C | 54%</div>
+                    <div id="statWeatherSub" class="metric-sub">Optimal Clear Sunshine</div>
+                </div>
+            </div>
+
+            <!-- Main Farm Map & Zone Inspector -->
+            <div class="farm-map-container">
+                <!-- Left: Satellite Map Canvas -->
+                <div class="glass-panel" style="padding: 1.25rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.85rem;">
+                        <h3 style="font-size: 1.15rem; color: #fff;">500-Acre Precision Farm Digital Twin</h3>
+                        <div style="display: flex; gap: 0.4rem; align-items: center;">
+                            <span class="hud-pill active" id="activeLayerPill">Layer: High-Res Drone Orthomosaic</span>
+                            <button class="btn-secondary" style="padding: 0.3rem 0.65rem; font-size: 0.75rem;" onclick="app.dispatchDroneScan()">
+                                🛸 Dispatch Autonomous Drone
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="map-wrapper">
+                        <img id="farmSatelliteImg" src="images/aerial_farm_drone.jpg" class="map-image" alt="Farm Aerial View">
+                        <div class="map-toolbar">
+                            <button class="map-tool-btn active" id="btnLayerSat" onclick="app.setMapLayer('natural')">Aerial Drone</button>
+                            <button class="map-tool-btn" id="btnLayerVector" onclick="app.setMapLayer('vector')">Cadastral Vector</button>
+                            <button class="map-tool-btn" id="btnLayerNdvi" onclick="app.setMapLayer('ndvi')">NDVI Heatmap</button>
+                            <button class="map-tool-btn" id="btnLayerMoist" onclick="app.setMapLayer('moisture')">Moisture Map</button>
+                        </div>
+                        <canvas id="farmOverlayCanvas" width="800" height="500" style="position: absolute; inset: 0; pointer-events: none; width: 100%; height: 100%;"></canvas>
+                    </div>
+
+                    <!-- Soil Stratigraphy Depth Cross-Section -->
+                    <div style="margin-top: 1rem; background: rgba(13,23,30,0.6); padding: 0.85rem; border-radius: 8px; border: 1px solid var(--border);">
+                        <div style="font-size: 0.8rem; font-weight: 700; color: #fff; margin-bottom: 0.5rem; display: flex; justify-content: space-between;">
+                            <span>🌱 3D Soil Stratigraphy & Root Depth Profile (Current Zone)</span>
+                            <span style="color: var(--accent-lime); font-size: 0.75rem;">Probe Depth: 100 cm</span>
+                        </div>
+                        <div class="soil-layer-strip">
+                            <div class="soil-stratum stratum-a">
+                                <div><strong>Topsoil (0 - 15 cm):</strong> Active Root Zone, Clay Loam, High Microbial Activity</div>
+                                <div><strong>Moisture: 36.2%</strong> | Organic Matter: 4.2%</div>
+                            </div>
+                            <div class="soil-stratum stratum-b">
+                                <div><strong>Subsoil (15 - 45 cm):</strong> Moisture Buffer Zone, Capillary Reservoir</div>
+                                <div><strong>Moisture: 41.5%</strong> | CEC: 24 meq/100g</div>
+                            </div>
+                            <div class="soil-stratum stratum-c">
+                                <div><strong>Deep Substratum (45 - 100 cm):</strong> Bedrock Drainage Interface & Water Table</div>
+                                <div><strong>Moisture: 48.0%</strong> | pH: 7.2</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Zone Inspector & Actions -->
+                <div class="glass-panel" style="padding: 1.25rem; display: flex; flex-direction: column; justify-content: space-between;">
+                    <div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                            <h3 id="inspectorZoneTitle" style="font-size: 1.15rem; color: #fff;">Zone A: Winter Wheat</h3>
+                            <span id="inspectorHealthBadge" class="hud-pill active">Optimal</span>
+                        </div>
+
+                        <!-- Live Sensor Meters -->
+                        <div style="display: flex; flex-direction: column; gap: 0.85rem; margin-bottom: 1.25rem;">
+                            <div>
+                                <div style="display: flex; justify-content: space-between; font-size: 0.82rem; margin-bottom: 0.25rem;">
+                                    <span style="color: var(--text-secondary);">Soil Moisture Saturation</span>
+                                    <strong id="inspectorMoisture" style="color: var(--accent-sky);">36.2%</strong>
+                                </div>
+                                <div class="bar-track"><div id="inspectorMoistureBar" class="bar-fill sky" style="width: 36.2%;"></div></div>
+                            </div>
+
+                            <div>
+                                <div style="display: flex; justify-content: space-between; font-size: 0.82rem; margin-bottom: 0.25rem;">
+                                    <span style="color: var(--text-secondary);">Vegetation Health (NDVI)</span>
+                                    <strong id="inspectorNdvi" style="color: var(--emerald-primary);">0.82</strong>
+                                </div>
+                                <div class="bar-track"><div id="inspectorNdviBar" class="bar-fill green" style="width: 82%;"></div></div>
+                            </div>
+
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; margin-top: 0.4rem;">
+                                <div style="background: rgba(13,23,30,0.8); padding: 0.6rem; border-radius: 6px; border: 1px solid var(--border);">
+                                    <div style="font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase;">Soil Temp</div>
+                                    <div id="inspectorSoilTemp" style="font-size: 1.1rem; font-weight: 700; color: #fff; margin-top: 0.15rem;">22.8°C</div>
+                                </div>
+                                <div style="background: rgba(13,23,30,0.8); padding: 0.6rem; border-radius: 6px; border: 1px solid var(--border);">
+                                    <div style="font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase;">Soil pH</div>
+                                    <div id="inspectorPh" style="font-size: 1.1rem; font-weight: 700; color: var(--accent-lime); margin-top: 0.15rem;">6.6</div>
+                                </div>
+                            </div>
+
+                            <!-- NPK Soil Macronutrients -->
+                            <div style="background: rgba(13,23,30,0.8); padding: 0.75rem; border-radius: 6px; border: 1px solid var(--border);">
+                                <div style="font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: 0.4rem;">NPK Soil Fertility (mg/kg)</div>
+                                <div style="display: flex; justify-content: space-between; font-size: 0.85rem;">
+                                    <span>Nitrogen (N): <strong id="inspectorN" style="color: #38bdf8;">78</strong></span>
+                                    <span>Phosphorus (P): <strong id="inspectorP" style="color: #fbbf24;">34</strong></span>
+                                    <span>Potassium (K): <strong id="inspectorK" style="color: #a78bfa;">195</strong></span>
+                                </div>
+                            </div>
+
+                            <div style="font-size: 0.82rem; color: #cbd5e1; line-height: 1.5;">
+                                <div>Crop Phenology: <strong id="inspectorStage" style="color: #fff;">Grain Filling</strong></div>
+                                <div>Days to Harvest: <strong id="inspectorHarvest" style="color: var(--accent-lime);">32 Days</strong></div>
+                                <div>Irrigation Status: <span id="inspectorIrrigation" class="hud-pill" style="font-size: 0.72rem;">Standby</span></div>
+                            </div>
+                        </div>
+
+                        <!-- Action Triggers -->
+                        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                            <button id="btnToggleValve" class="btn-primary" onclick="app.toggleSelectedValve()">
+                                💧 Toggle Variable Rate Irrigation
+                            </button>
+                            <button class="btn-secondary" onclick="app.applyFertilizerToSelected()">
+                                🧪 Apply Liquid Fertigation (NPK)
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Zone Switcher Buttons -->
+                    <div style="margin-top: 1.25rem;">
+                        <label class="form-label" style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.4rem; display: block;">Select Farm Zone</label>
+                        <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.35rem;">
+                            <button class="sample-preset-btn" onclick="app.selectZone('zone-a')">Zone A</button>
+                            <button class="sample-preset-btn" onclick="app.selectZone('zone-b')">Zone B</button>
+                            <button class="sample-preset-btn" onclick="app.selectZone('zone-c')">Zone C</button>
+                            <button class="sample-preset-btn" onclick="app.selectZone('zone-d')">Zone D</button>
+                            <button class="sample-preset-btn" onclick="app.selectZone('zone-e')">Zone E</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- VIEW 2: AI PLANT DISEASE VISION LAB (REAL PHOTOGRAPHY) -->
+        <section id="viewDisease" class="view-section">
+            <div class="hero-header" style="text-align: left; margin-bottom: 1.5rem;">
+                <div class="hud-pill active">🔬 Neural Plant Pathology Vision Lab</div>
+                <h2 style="font-size: 1.85rem; color: #fff; margin-top: 0.4rem;">AI Crop Disease Diagnostic Studio</h2>
+                <p style="color: var(--text-secondary); font-size: 0.95rem;">High-resolution botanical pathology diagnostics powered by convolutional neural networks. Segment necrotic lesions, assess infection severity, and generate bio-chemical treatment plans.</p>
+            </div>
+
+            <div class="vision-grid">
+                <!-- Left: Neural Scanner with Real Leaf Macro Photo -->
+                <div class="glass-panel" style="padding: 1.25rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.85rem;">
+                        <span id="scannerCropTitle" style="font-size: 1rem; font-weight: 700; color: #fff;">Tomato (Solanum lycopersicum)</span>
+                        <span id="scannerStatusPill" class="hud-pill active">Neural Model Ready</span>
+                    </div>
+
+                    <div class="scanner-frame">
+                        <img id="activeScannerImg" src="images/real_tomato_blight.jpg" class="scanner-image" alt="Real Leaf Pathology">
+                        <div id="scannerLaser" class="scanner-laser"></div>
+                        <div id="lesionsContainer" style="position: absolute; inset: 0; pointer-events: none;"></div>
+                    </div>
+
+                    <!-- Gallery Selector with Real Photos -->
+                    <div style="margin-top: 1rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.35rem;">
+                            <span style="font-size: 0.8rem; color: var(--text-secondary); font-weight: 600;">Pathology Leaf Gallery (Click to Inspect):</span>
+                            <label class="btn-secondary" style="padding: 0.25rem 0.6rem; font-size: 0.72rem; cursor: pointer;">
+                                📷 Upload Custom Leaf
+                                <input type="file" style="display: none;" accept="image/*" onchange="app.handleCustomLeafUpload(event)">
+                            </label>
+                        </div>
+
+                        <div class="sample-gallery">
+                            <div class="gallery-thumb active" onclick="app.loadDiseaseSample('tomato_blight')">
+                                <img src="images/real_tomato_blight.jpg" alt="Real Tomato Blight">
+                            </div>
+                            <div class="gallery-thumb" onclick="app.loadDiseaseSample('corn_blight')">
+                                <img src="images/real_corn_blight.jpg" alt="Real Corn Blight">
+                            </div>
+                            <div class="gallery-thumb" onclick="app.loadDiseaseSample('potato_late_blight')">
+                                <img src="images/potato_late_blight.svg" alt="Potato Blight">
+                            </div>
+                            <div class="gallery-thumb" onclick="app.loadDiseaseSample('wheat_rust')">
+                                <img src="images/wheat_yellow_rust.svg" alt="Wheat Rust">
+                            </div>
+                            <div class="gallery-thumb" onclick="app.loadDiseaseSample('healthy_crop')">
+                                <img src="images/healthy_crop.svg" alt="Healthy Control">
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="btn-primary" style="width: 100%; margin-top: 1.25rem;" onclick="app.runAiDiseaseScan()">
+                        ⚡ Execute Neural Vision Pathology Scan
+                    </button>
+                </div>
+
+                <!-- Right: Diagnostic Pathology Report -->
+                <div class="glass-panel" style="padding: 1.5rem; display: flex; flex-direction: column; justify-content: space-between;">
+                    <div>
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.25rem;">
+                            <div>
+                                <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Pathogen Identification</div>
+                                <h3 id="diagDiseaseName" style="font-size: 1.45rem; color: #fff; margin-top: 0.2rem;">Early Blight</h3>
+                                <div id="diagPathogen" style="font-size: 0.85rem; color: var(--accent-amber); font-style: italic;">Alternaria solani (Fungal)</div>
+                            </div>
+                            <div style="text-align: right;">
+                                <div id="diagConfidence" style="font-size: 1.6rem; font-weight: 800; color: var(--emerald-primary);">98.6%</div>
+                                <div style="font-size: 0.7rem; color: var(--text-muted);">Neural Confidence</div>
+                            </div>
+                        </div>
+
+                        <div style="background: rgba(13,23,30,0.8); padding: 0.85rem; border-radius: 8px; border: 1px solid var(--border); margin-bottom: 1.25rem;">
+                            <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Severity & Damage Index</div>
+                            <div id="diagSeverity" style="font-size: 0.95rem; font-weight: 600; color: #f87171; margin-top: 0.25rem;">34% Leaf Area Necrotic (Moderate Infection)</div>
+                            <p id="diagSymptoms" style="font-size: 0.82rem; color: #cbd5e1; margin-top: 0.4rem; line-height: 1.5;">Concentric dark brown 'target-board' rings surrounded by chlorotic yellow halos.</p>
+                        </div>
+
+                        <h4 style="font-size: 0.95rem; color: #fff; margin-bottom: 0.75rem;">Targeted Treatment Protocol</h4>
+
+                        <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                            <div style="background: rgba(16,185,129,0.08); border-left: 3px solid var(--emerald-primary); padding: 0.75rem; border-radius: 6px;">
+                                <strong style="color: var(--emerald-primary); font-size: 0.82rem; text-transform: uppercase;">Biological / Organic Control:</strong>
+                                <p id="prescOrganic" style="font-size: 0.82rem; color: #cbd5e1; margin-top: 0.2rem; line-height: 1.4;">Apply Bacillus subtilis spray (2 kg/ha) or copper hydroxide bio-formulation every 7 days.</p>
+                            </div>
+
+                            <div style="background: rgba(245,158,11,0.08); border-left: 3px solid var(--accent-amber); padding: 0.75rem; border-radius: 6px;">
+                                <strong style="color: var(--accent-amber); font-size: 0.82rem; text-transform: uppercase;">Precision Chemical Formulation:</strong>
+                                <p id="prescChemical" style="font-size: 0.82rem; color: #cbd5e1; margin-top: 0.2rem; line-height: 1.4;">Azoxystrobin 23% SC @ 1.0 ml/L or Chlorothalonil 75% WP @ 2.0 g/L alternating with Mancozeb.</p>
+                            </div>
+
+                            <div style="background: rgba(14,165,233,0.08); border-left: 3px solid var(--accent-sky); padding: 0.75rem; border-radius: 6px;">
+                                <strong style="color: var(--accent-sky); font-size: 0.82rem; text-transform: uppercase;">Microclimate Cultural Safeguard:</strong>
+                                <p id="prescCultural" style="font-size: 0.82rem; color: #cbd5e1; margin-top: 0.2rem; line-height: 1.4;">Eliminate overhead sprinkler watering; switch strictly to drip irrigation to avoid leaf wetness duration.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: 0.75rem; margin-top: 1.5rem;">
+                        <button class="btn-secondary" style="flex: 1;" onclick="window.print()">Export Pathology Report</button>
+                        <button class="btn-primary" style="flex: 1;" onclick="app.dispatchDroneSpray()">Dispatch Drone Sprayer</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- VIEW 3: FPV DRONE COCKPIT & THERMAL HUD -->
+        <section id="viewFpv" class="view-section">
+            <div class="glass-panel" style="margin-bottom: 1.5rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+                    <div>
+                        <h2 style="font-size: 1.8rem; color: #fff;">AeroScan X40 — First-Person View (FPV) Drone Cockpit</h2>
+                        <p style="color: var(--text-secondary); font-size: 0.9rem;">Live aerial telemetry feed with artificial horizon, FLIR thermal infrared canopy sensor, and RTK GPS positioning.</p>
+                    </div>
+                    <div style="display: flex; gap: 0.5rem;">
+                        <button id="btnToggleFlir" class="btn-secondary" onclick="app.toggleFlirThermal()">🔥 Toggle FLIR Thermal</button>
+                        <button class="btn-primary" onclick="app.dispatchDroneScan()">▶ Trigger Survey Waypoints</button>
+                    </div>
+                </div>
+
+                <div class="fpv-hud-container">
+                    <img id="fpvCameraFeed" src="images/smart_drone_spray.jpg" class="fpv-bg-img" alt="FPV Drone Camera">
+
+                    <!-- FPV Telemetry HUD -->
+                    <div class="fpv-telemetry-overlay">
+                        <div class="fpv-top-bar">
+                            <span>CAM: 4K 60FPS / FLIR THERMAL</span>
+                            <span>ALT: 45.2 M AGL</span>
+                            <span>SPD: 32.4 KM/H</span>
+                            <span>BATTERY: 84% [24.2V]</span>
+                            <span>RTK: 41°52'18"N 87°37'24"W</span>
+                        </div>
+
+                        <!-- Center Crosshair -->
+                        <div class="fpv-crosshair">
+                            <svg viewBox="0 0 100 100" width="100%" height="100%">
+                                <circle cx="50" cy="50" r="30" fill="none" stroke="#10b981" stroke-width="1.5" stroke-dasharray="4 2"/>
+                                <line x1="50" y1="10" x2="50" y2="35" stroke="#10b981" stroke-width="2"/>
+                                <line x1="50" y1="65" x2="50" y2="90" stroke="#10b981" stroke-width="2"/>
+                                <line x1="10" y1="50" x2="35" y2="50" stroke="#10b981" stroke-width="2"/>
+                                <line x1="65" y1="50" x2="90" y2="50" stroke="#10b981" stroke-width="2"/>
+                                <circle cx="50" cy="50" r="3" fill="#10b981"/>
+                            </svg>
+                        </div>
+
+                        <div class="fpv-bottom-bar">
+                            <div>GIMBAL PITCH: -45° | YAW: 182° S</div>
+                            <div>CANOPY TEMP: 26.4°C (OPTIMAL)</div>
+                            <div>TRANSMISSION: 5.8 GHz O3 ENTERPRISE (98% SIGNAL)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- VIEW 4: AUTONOMOUS FLEET & ROBOTICS HUB -->
+        <section id="viewFleet" class="view-section">
+            <div class="glass-panel" style="margin-bottom: 1.5rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                    <div>
+                        <h2 style="font-size: 1.8rem; color: #fff;">Autonomous Farm Fleet & Robotics Hub</h2>
+                        <p style="color: var(--text-secondary); font-size: 0.9rem;">Fleet management for autonomous aerial drones, electric LiDAR rovers, and smart pivot rigs.</p>
+                    </div>
+                    <span class="hud-pill active">Fleet Network: 4 / 4 Units Online</span>
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem;">
+                    <!-- Unit 1 -->
+                    <div class="robot-card">
+                        <div>
+                            <div class="robot-header">
+                                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                    <div class="robot-avatar">🛸</div>
+                                    <div>
+                                        <h4 style="color: #fff; font-size: 1.1rem;">AeroScan X40</h4>
+                                        <span style="font-size: 0.75rem; color: var(--text-secondary);">Multispectral Aerial Drone</span>
+                                    </div>
+                                </div>
+                                <span class="hud-pill active">Active</span>
+                            </div>
+
+                            <div style="font-size: 0.82rem; color: #cbd5e1; line-height: 1.8; margin: 1rem 0;">
+                                <div>Location: <strong>Zone B (Sweet Corn)</strong></div>
+                                <div>Battery Level: <strong style="color: var(--emerald-primary);">84%</strong></div>
+                                <div>Altitude / Speed: <strong>45m AGL | 32 km/h</strong></div>
+                                <div>Payload: <strong>5-Band Multispectral + Thermal</strong></div>
+                            </div>
+                        </div>
+
+                        <button class="btn-primary" style="font-size: 0.85rem;" onclick="alert('AeroScan X40 dispatched for high-resolution multispectral zone mapping.')">
+                            Dispatch Mapping Flight
+                        </button>
+                    </div>
+
+                    <!-- Unit 2 -->
+                    <div class="robot-card">
+                        <div>
+                            <div class="robot-header">
+                                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                    <div class="robot-avatar">🚁</div>
+                                    <div>
+                                        <h4 style="color: #fff; font-size: 1.1rem;">Agras T40 Sprayer</h4>
+                                        <span style="font-size: 0.75rem; color: var(--text-secondary);">Precision Foliar Drone</span>
+                                    </div>
+                                </div>
+                                <span class="hud-pill">Docked</span>
+                            </div>
+
+                            <div style="font-size: 0.82rem; color: #cbd5e1; line-height: 1.8; margin: 1rem 0;">
+                                <div>Location: <strong>Base Hangar Dock #1</strong></div>
+                                <div>Battery Level: <strong style="color: var(--emerald-primary);">96%</strong></div>
+                                <div>Payload Tank: <strong>40L Bio-Fungicide (100% Full)</strong></div>
+                                <div>Droplet Size: <strong>120μm Centrifugal Atomizer</strong></div>
+                            </div>
+                        </div>
+
+                        <button class="btn-secondary" style="font-size: 0.85rem;" onclick="alert('Agras T40 initiated automated pre-flight checks. Ready for targeted bio-spray.')">
+                            Deploy Bio-Spray Mission
+                        </button>
+                    </div>
+
+                    <!-- Unit 3 -->
+                    <div class="robot-card">
+                        <div>
+                            <div class="robot-header">
+                                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                    <div class="robot-avatar">🚜</div>
+                                    <div>
+                                        <h4 style="color: #fff; font-size: 1.1rem;">TerraBot Pro</h4>
+                                        <span style="font-size: 0.75rem; color: var(--text-secondary);">Electric LiDAR Weeding Rover</span>
+                                    </div>
+                                </div>
+                                <span class="hud-pill active">Active</span>
+                            </div>
+
+                            <div style="font-size: 0.82rem; color: #cbd5e1; line-height: 1.8; margin: 1rem 0;">
+                                <div>Location: <strong>Zone A (Wheat - Row 42)</strong></div>
+                                <div>Solar Battery: <strong style="color: var(--accent-lime);">91%</strong></div>
+                                <div>Navigation: <strong>Dual LiDAR + RTK (±1.5cm)</strong></div>
+                                <div>Mission: <strong>Chemical-Free Laser Weeding</strong></div>
+                            </div>
+                        </div>
+
+                        <button class="btn-secondary" style="font-size: 0.85rem;" onclick="alert('TerraBot Pro waypoint updated. Navigating to Zone A Row 43.')">
+                            Adjust Rover Trajectory
+                        </button>
+                    </div>
+
+                    <!-- Unit 4 -->
+                    <div class="robot-card">
+                        <div>
+                            <div class="robot-header">
+                                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                    <div class="robot-avatar">💧</div>
+                                    <div>
+                                        <h4 style="color: #fff; font-size: 1.1rem;">Pivot Sentinel Alpha</h4>
+                                        <span style="font-size: 0.75rem; color: var(--text-secondary);">Center Pivot Rig</span>
+                                    </div>
+                                </div>
+                                <span class="hud-pill active">Pumping</span>
+                            </div>
+
+                            <div style="font-size: 0.82rem; color: #cbd5e1; line-height: 1.8; margin: 1rem 0;">
+                                <div>Location: <strong>Zone B Field Center</strong></div>
+                                <div>Flow Rate: <strong>650 GPM @ 42 PSI</strong></div>
+                                <div>Span Length: <strong>400m Galvanized Steel</strong></div>
+                                <div>Speed: <strong>0.8 km/h Sweep Cycle</strong></div>
+                            </div>
+                        </div>
+
+                        <button class="btn-primary" style="font-size: 0.85rem;" onclick="app.toggleSelectedValve()">
+                            Toggle Pivot Flow
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- VIEW 5: AGRICOPILOT AI ADVISOR -->
+        <section id="viewCopilot" class="view-section">
+            <div class="glass-panel" style="margin-bottom: 1.5rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+                    <div>
+                        <h2 style="font-size: 1.8rem; color: #fff;">AgriCopilot — AI Agronomic Intelligence Advisor</h2>
+                        <p style="color: var(--text-secondary); font-size: 0.9rem;">Ask questions about your farm's real-time soil moisture, crop nutrition, disease prescriptions, or harvest pricing.</p>
+                    </div>
+                    <span class="hud-pill active">Telemetry Connected</span>
+                </div>
+
+                <div class="chat-window">
+                    <div id="chatMessagesContainer" class="chat-messages">
+                        <div class="chat-bubble ai">
+                            Hello! I am <strong>AgriCopilot</strong>, your autonomous agronomic intelligence advisor. I am actively monitoring live sensor telemetry across all 430 acres. How can I assist with crop nutrition, disease diagnosis, or irrigation optimization today?
+                        </div>
+                    </div>
+
+                    <!-- Quick Prompt Pills -->
+                    <div class="chat-prompt-pills">
+                        <span style="font-size: 0.72rem; color: var(--text-muted); align-self: center;">Suggested Prompts:</span>
+                        <button class="chat-prompt-btn" onclick="app.sendCopilotPrompt('Why is Zone B flagged with a water stress warning?')">💧 Zone B Water Stress?</button>
+                        <button class="chat-prompt-btn" onclick="app.sendCopilotPrompt('What is the recommended nitrogen top-dress for Zone A Wheat?')">🧪 Zone A Nitrogen Top-Dress</button>
+                        <button class="chat-prompt-btn" onclick="app.sendCopilotPrompt('How should I manage Alternaria solani in humid conditions?')">🔬 Treat Alternaria Blight</button>
+                        <button class="chat-prompt-btn" onclick="app.sendCopilotPrompt('Calculate expected harvest revenue if market prices drop 5%?')">💰 -5% Price Shock Impact</button>
+                        <button class="chat-prompt-btn" onclick="app.sendCopilotPrompt('Deploy autonomous drone spray mission for Zone B')">🛸 Deploy Spray Drone</button>
+                    </div>
+
+                    <!-- Chat Input Bar -->
+                    <div class="chat-input-bar">
+                        <input type="text" id="copilotInput" class="chat-input" placeholder="Type your agronomic question or request..." onkeydown="if(event.key==='Enter') app.sendCopilotMessage()">
+                        <button class="btn-primary" style="padding: 0.6rem 1.25rem; font-size: 0.85rem;" onclick="app.sendCopilotMessage()">Send</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- VIEW 6: SMART IRRIGATION & VRT -->
+        <section id="viewIrrigation" class="view-section">
+            <div class="glass-panel" style="margin-bottom: 1.5rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+                    <div>
+                        <h2 style="font-size: 1.8rem; color: #fff;">Smart Irrigation & Variable Rate Technology (VRT)</h2>
+                        <p style="color: var(--text-secondary); font-size: 0.9rem;">Closed-loop soil-water deficit optimization using the FAO-56 Penman-Monteith Evapotranspiration formula.</p>
+                    </div>
+                    <span class="hud-pill active">Closed Loop AI Auto-Pilot: Active</span>
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
+                    <div style="background: rgba(13,23,30,0.8); padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--border);">
+                        <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Reference ET₀ (Penman-Monteith)</div>
+                        <div id="vrtEt0Val" style="font-size: 1.6rem; font-weight: 800; color: var(--accent-sky); margin-top: 0.25rem;">4.85 mm/day</div>
+                        <div style="font-size: 0.75rem; color: var(--emerald-primary);">Atmospheric evapotranspiration demand</div>
+                    </div>
+
+                    <div style="background: rgba(13,23,30,0.8); padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--border);">
+                        <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Total Water Conserved</div>
+                        <div id="vrtWaterSavedVal" style="font-size: 1.6rem; font-weight: 800; color: var(--emerald-primary); margin-top: 0.25rem;">142,400 Gal</div>
+                        <div style="font-size: 0.75rem; color: var(--accent-lime);">$256.32 utility reduction</div>
+                    </div>
+
+                    <div style="background: rgba(13,23,30,0.8); padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--border);">
+                        <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Active Solenoid Valves</div>
+                        <div id="vrtActiveValvesVal" style="font-size: 1.6rem; font-weight: 800; color: var(--accent-amber); margin-top: 0.25rem;">2 / 5 Zones</div>
+                        <div style="font-size: 0.75rem; color: var(--text-secondary);">Zone B & Zone D Pumping</div>
+                    </div>
+                </div>
+
+                <h3 style="font-size: 1.15rem; color: #fff; margin-bottom: 0.75rem;">Multi-Zone Valve Controller Matrix</h3>
+                <div style="overflow-x: auto;">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Zone ID</th>
+                                <th>Crop Monitored</th>
+                                <th>Soil Moisture</th>
+                                <th>Threshold Low / High</th>
+                                <th>Solenoid Valve</th>
+                                <th>Water Delivered</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="vrtTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- VIEW 7: YIELD & CARBON MODELS -->
+        <section id="viewYield" class="view-section">
+            <div class="glass-panel" style="margin-bottom: 1.5rem;">
+                <h2 style="font-size: 1.8rem; color: #fff; margin-bottom: 0.5rem;">Predictive Yield & Soil Carbon Sequestration Engine</h2>
+                <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1.5rem;">Multi-variate yield forecasting accounting for soil nutrient availability, cumulative thermal units (GDD), and carbon offset payouts.</p>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; margin-bottom: 2rem;">
+                    <div style="background: rgba(13,23,30,0.7); padding: 1.25rem; border-radius: var(--radius-md); border: 1px solid var(--border);">
+                        <div style="font-size: 0.8rem; color: var(--accent-lime); font-weight: 600;">🌾 Winter Wheat (Zone A)</div>
+                        <div style="font-size: 1.8rem; font-weight: 800; color: #fff; margin: 0.4rem 0;">71.4 <span style="font-size: 1rem; color: var(--text-secondary);">Bu/Acre</span></div>
+                        <div style="font-size: 0.8rem; color: var(--text-secondary);">Regional Baseline: 68 Bu/Acre (+5.0% Outperformance)</div>
+                        <div style="margin-top: 0.75rem; font-size: 0.85rem; color: var(--emerald-primary);">Projected Harvest Revenue: <strong>$58,683</strong></div>
+                    </div>
+
+                    <div style="background: rgba(13,23,30,0.7); padding: 1.25rem; border-radius: var(--radius-md); border: 1px solid var(--border);">
+                        <div style="font-size: 0.8rem; color: var(--accent-amber); font-weight: 600;">🌽 Sweet Corn (Zone B)</div>
+                        <div style="font-size: 1.8rem; font-weight: 800; color: #fff; margin: 0.4rem 0;">178.2 <span style="font-size: 1rem; color: var(--text-secondary);">Bu/Acre</span></div>
+                        <div style="font-size: 0.8rem; color: var(--text-secondary);">Regional Baseline: 185 Bu/Acre (-3.6% Moisture Stress)</div>
+                        <div style="margin-top: 0.75rem; font-size: 0.85rem; color: var(--emerald-primary);">Projected Harvest Revenue: <strong>$90,169</strong></div>
+                    </div>
+
+                    <div style="background: rgba(13,23,30,0.7); padding: 1.25rem; border-radius: var(--radius-md); border: 1px solid var(--border);">
+                        <div style="font-size: 0.8rem; color: var(--accent-purple); font-weight: 600;">🍇 Cabernet Grapes (Zone C)</div>
+                        <div style="font-size: 1.8rem; font-weight: 800; color: #fff; margin: 0.4rem 0;">4.4 <span style="font-size: 1rem; color: var(--text-secondary);">Tons/Acre</span></div>
+                        <div style="font-size: 0.8rem; color: var(--text-secondary);">Controlled Deficit Brix: 21.8° (Premium Reserve)</div>
+                        <div style="margin-top: 0.75rem; font-size: 0.85rem; color: var(--emerald-primary);">Projected Harvest Revenue: <strong>$940,500</strong></div>
+                    </div>
+                </div>
+
+                <div style="background: rgba(16,185,129,0.08); border: 1px solid rgba(16,185,129,0.3); border-radius: var(--radius-md); padding: 1.5rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <div style="font-size: 0.8rem; color: var(--emerald-primary); font-weight: 700; text-transform: uppercase;">ESG & Carbon Offset Ledger</div>
+                            <h3 style="font-size: 1.4rem; color: #fff; margin-top: 0.25rem;">365.5 Metric Tons CO₂e Sequestered</h3>
+                            <p style="font-size: 0.85rem; color: #cbd5e1; margin-top: 0.25rem;">Earned via regenerative no-till cultivation, cover crop biomass, and automated precision fertigation across 430 acres.</p>
+                        </div>
+                        <div style="text-align: right;">
+                            <div style="font-size: 1.8rem; font-weight: 800; color: var(--accent-lime);">$11,878.75</div>
+                            <div style="font-size: 0.75rem; color: var(--text-secondary);">Carbon Credit Value ($32.50/MT)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- VIEW 8: MICRO-CLIMATE RADAR -->
+        <section id="viewWeather" class="view-section">
+            <div class="glass-panel" style="margin-bottom: 1.5rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                    <div>
+                        <h2 style="font-size: 1.8rem; color: #fff;">Farm Micro-Climate Weather Station</h2>
+                        <p style="color: var(--text-secondary); font-size: 0.9rem;">Hyper-local 7-day meteorological forecast, canopy dew point, and extreme event early warning radar.</p>
+                    </div>
+                    <span class="hud-pill active">Radar Station ID: CA-STATION-09</span>
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.75rem;">
+                    <div style="background: rgba(13,23,30,0.8); border: 1px solid var(--border); border-radius: 8px; padding: 1rem; text-align: center;">
+                        <div style="font-size: 0.8rem; color: var(--text-secondary);">Today</div>
+                        <div style="font-size: 1.8rem; margin: 0.4rem 0;">☀️</div>
+                        <div style="font-weight: 700; color: #fff;">28° / 17°</div>
+                        <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 0.25rem;">0% Rain</div>
+                    </div>
+
+                    <div style="background: rgba(13,23,30,0.8); border: 1px solid var(--border); border-radius: 8px; padding: 1rem; text-align: center;">
+                        <div style="font-size: 0.8rem; color: var(--text-secondary);">Tomorrow</div>
+                        <div style="font-size: 1.8rem; margin: 0.4rem 0;">⛅</div>
+                        <div style="font-weight: 700; color: #fff;">27° / 18°</div>
+                        <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 0.25rem;">15% Rain</div>
+                    </div>
+
+                    <div style="background: rgba(13,23,30,0.8); border: 1px solid var(--border); border-radius: 8px; padding: 1rem; text-align: center;">
+                        <div style="font-size: 0.8rem; color: var(--text-secondary);">Day 3</div>
+                        <div style="font-size: 1.8rem; margin: 0.4rem 0;">🌧️</div>
+                        <div style="font-weight: 700; color: #fff;">22° / 15°</div>
+                        <div style="font-size: 0.72rem; color: var(--accent-sky); margin-top: 0.25rem;">75% Rain (18mm)</div>
+                    </div>
+
+                    <div style="background: rgba(13,23,30,0.8); border: 1px solid var(--border); border-radius: 8px; padding: 1rem; text-align: center;">
+                        <div style="font-size: 0.8rem; color: var(--text-secondary);">Day 4</div>
+                        <div style="font-size: 1.8rem; margin: 0.4rem 0;">🌤️</div>
+                        <div style="font-weight: 700; color: #fff;">25° / 16°</div>
+                        <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 0.25rem;">10% Rain</div>
+                    </div>
+
+                    <div style="background: rgba(13,23,30,0.8); border: 1px solid var(--border); border-radius: 8px; padding: 1rem; text-align: center;">
+                        <div style="font-size: 0.8rem; color: var(--text-secondary);">Day 5</div>
+                        <div style="font-size: 1.8rem; margin: 0.4rem 0;">☀️</div>
+                        <div style="font-weight: 700; color: #fff;">29° / 19°</div>
+                        <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 0.25rem;">5% Rain</div>
+                    </div>
+
+                    <div style="background: rgba(13,23,30,0.8); border: 1px solid var(--border); border-radius: 8px; padding: 1rem; text-align: center;">
+                        <div style="font-size: 0.8rem; color: var(--text-secondary);">Day 6</div>
+                        <div style="font-size: 1.8rem; margin: 0.4rem 0;">☀️</div>
+                        <div style="font-weight: 700; color: #fff;">31° / 20°</div>
+                        <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 0.25rem;">0% Rain</div>
+                    </div>
+
+                    <div style="background: rgba(13,23,30,0.8); border: 1px solid var(--border); border-radius: 8px; padding: 1rem; text-align: center;">
+                        <div style="font-size: 0.8rem; color: var(--text-secondary);">Day 7</div>
+                        <div style="font-size: 1.8rem; margin: 0.4rem 0;">🌤️</div>
+                        <div style="font-weight: 700; color: #fff;">28° / 18°</div>
+                        <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 0.25rem;">10% Rain</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Scripts -->
+    <script src="farm_simulator.js"></script>
+    <script src="disease_vision.js"></script>
+    <script src="yield_engine.js"></script>
+    <script src="fleet_robotics.js"></script>
+    <script src="agri_copilot.js"></script>
+    <script src="farm_audio.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
