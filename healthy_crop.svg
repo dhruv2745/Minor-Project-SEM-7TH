@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="100%" height="100%">
+  <defs>
+    <radialGradient id="healthyLeaf" cx="40%" cy="50%" r="65%">
+      <stop offset="0%" stop-color="#86efac" />
+      <stop offset="30%" stop-color="#22c55e" />
+      <stop offset="75%" stop-color="#15803d" />
+      <stop offset="100%" stop-color="#14532d" />
+    </radialGradient>
+  </defs>
+  <rect width="400" height="300" fill="#091319" rx="12"/>
+  <path d="M200,30 Q330,95 290,220 Q200,285 110,220 Q70,95 200,30 Z" fill="url(#healthyLeaf)" stroke="#16a34a" stroke-width="3"/>
+  <path d="M200,30 Q200,160 200,285" stroke="#bbf7d0" stroke-width="4" fill="none" opacity="0.8"/>
+  <path d="M200,85 Q245,110 275,130" stroke="#bbf7d0" stroke-width="2.5" fill="none" opacity="0.7"/>
+  <path d="M200,135 Q255,160 280,185" stroke="#bbf7d0" stroke-width="2.5" fill="none" opacity="0.7"/>
+  <path d="M200,105 Q155,130 125,150" stroke="#bbf7d0" stroke-width="2.5" fill="none" opacity="0.7"/>
+  <path d="M200,165 Q145,190 120,215" stroke="#bbf7d0" stroke-width="2.5" fill="none" opacity="0.7"/>
+</svg>

@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="100%" height="100%">
+  <defs>
+    <radialGradient id="leafGrad" cx="40%" cy="50%" r="60%">
+      <stop offset="0%" stop-color="#4ade80" />
+      <stop offset="65%" stop-color="#16a34a" />
+      <stop offset="100%" stop-color="#14532d" />
+    </radialGradient>
+    <radialGradient id="lesion1" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#1c1917" />
+      <stop offset="40%" stop-color="#78350f" />
+      <stop offset="80%" stop-color="#b45309" />
+      <stop offset="100%" stop-color="#fde047" />
+    </radialGradient>
+  </defs>
+  <rect width="400" height="300" fill="#091319" rx="12"/>
+  <path d="M200,30 Q310,90 280,220 Q200,280 120,220 Q90,90 200,30 Z" fill="url(#leafGrad)" stroke="#15803d" stroke-width="3"/>
+  <path d="M200,30 Q200,160 200,280" stroke="#86efac" stroke-width="4" fill="none" opacity="0.6"/>
+  <path d="M200,90 Q240,110 265,130" stroke="#86efac" stroke-width="2.5" fill="none" opacity="0.6"/>
+  <path d="M200,140 Q250,165 270,185" stroke="#86efac" stroke-width="2.5" fill="none" opacity="0.6"/>
+  <path d="M200,110 Q150,130 135,150" stroke="#86efac" stroke-width="2.5" fill="none" opacity="0.6"/>
+  <path d="M200,170 Q150,195 130,220" stroke="#86efac" stroke-width="2.5" fill="none" opacity="0.6"/>
+  <circle cx="220" cy="120" r="26" fill="url(#lesion1)" opacity="0.95"/>
+  <circle cx="220" cy="120" r="16" fill="none" stroke="#451a03" stroke-width="2"/>
+  <circle cx="220" cy="120" r="8" fill="none" stroke="#292524" stroke-width="2"/>
+  <circle cx="160" cy="180" r="32" fill="url(#lesion1)" opacity="0.95"/>
+  <circle cx="160" cy="180" r="22" fill="none" stroke="#451a03" stroke-width="2"/>
+  <circle cx="160" cy="180" r="12" fill="none" stroke="#292524" stroke-width="2"/>
+  <circle cx="235" cy="210" r="18" fill="url(#lesion1)" opacity="0.9"/>
+  <circle cx="150" cy="110" r="14" fill="url(#lesion1)" opacity="0.85"/>
+</svg>

@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="100%" height="100%">
+  <defs>
+    <linearGradient id="wheatLeaf" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#84cc16" />
+      <stop offset="50%" stop-color="#4d7c0f" />
+      <stop offset="100%" stop-color="#365314" />
+    </linearGradient>
+  </defs>
+  <rect width="400" height="300" fill="#091319" rx="12"/>
+  <path d="M30,180 Q200,60 370,110 Q220,220 30,180 Z" fill="url(#wheatLeaf)" stroke="#4d7c0f" stroke-width="3"/>
+  <g fill="#f59e0b" opacity="0.95">
+    <ellipse cx="120" cy="135" rx="14" ry="3" transform="rotate(-15 120 135)"/>
+    <ellipse cx="150" cy="127" rx="16" ry="3.5" transform="rotate(-15 150 127)"/>
+    <ellipse cx="185" cy="118" rx="18" ry="4" transform="rotate(-15 185 118)"/>
+    <ellipse cx="225" cy="110" rx="20" ry="4" transform="rotate(-15 225 110)"/>
+    <ellipse cx="265" cy="105" rx="16" ry="3.5" transform="rotate(-15 265 105)"/>
+    <ellipse cx="140" cy="150" rx="15" ry="3.5" transform="rotate(-15 140 150)"/>
+    <ellipse cx="175" cy="142" rx="18" ry="4" transform="rotate(-15 175 142)"/>
+    <ellipse cx="215" cy="134" rx="19" ry="4" transform="rotate(-15 215 134)"/>
+    <ellipse cx="255" cy="126" rx="17" ry="3.5" transform="rotate(-15 255 126)"/>
+    <ellipse cx="290" cy="120" rx="14" ry="3" transform="rotate(-15 290 120)"/>
+  </g>
+</svg>

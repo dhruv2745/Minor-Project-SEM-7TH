@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="100%" height="100%">
+  <defs>
+    <linearGradient id="cornLeaf" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#22c55e" />
+      <stop offset="70%" stop-color="#15803d" />
+      <stop offset="100%" stop-color="#14532d" />
+    </linearGradient>
+    <linearGradient id="blightLesion" x1="0%" y1="50%" x2="100%" y2="50%">
+      <stop offset="0%" stop-color="#ca8a04" />
+      <stop offset="30%" stop-color="#78350f" />
+      <stop offset="50%" stop-color="#451a03" />
+      <stop offset="70%" stop-color="#78350f" />
+      <stop offset="100%" stop-color="#ca8a04" />
+    </linearGradient>
+  </defs>
+  <rect width="400" height="300" fill="#091319" rx="12"/>
+  <path d="M50,150 Q180,50 360,90 Q220,240 50,150 Z" fill="url(#cornLeaf)" stroke="#16a34a" stroke-width="3"/>
+  <path d="M60,150 Q180,60 350,95" stroke="#86efac" stroke-width="2" fill="none" opacity="0.5"/>
+  <path d="M65,155 Q190,75 340,110" stroke="#86efac" stroke-width="1.5" fill="none" opacity="0.4"/>
+  <path d="M70,145 Q170,85 330,125" stroke="#86efac" stroke-width="1.5" fill="none" opacity="0.4"/>
+  <ellipse cx="190" cy="110" rx="55" ry="14" transform="rotate(-12 190 110)" fill="url(#blightLesion)"/>
+  <ellipse cx="270" cy="130" rx="40" ry="11" transform="rotate(-15 270 130)" fill="url(#blightLesion)"/>
+  <ellipse cx="130" cy="140" rx="35" ry="9" transform="rotate(-10 130 140)" fill="url(#blightLesion)"/>
+</svg>
